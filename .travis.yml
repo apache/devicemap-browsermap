@@ -30,4 +30,4 @@ before_script:
 # whitelist
 branches:
   only:
-    - master
+    - trunk

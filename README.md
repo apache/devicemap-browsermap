@@ -1,8 +1,4 @@
-# BrowserMap [![Build Status](https://travis-ci.org/raducotescu/browsermap.png?branch=master)](https://travis-ci.org/raducotescu/browsermap)
-
-**NOTICE: BrowserMap has been donated to the Apache Software Foundation, as a client-side module of the
-[Apache DeviceMap](http://incubator.apache.org/devicemap/ "Apache DeviceMap") project. Until the full integration is completed fixes will be
-pushed to both code repositories. Once BrowserMap is fully migrated the development will continue solely on ASF's infrastructure.**
+# Apache DeviceMap - BrowserMap module [![Build Status](https://travis-ci.org/apache/devicemap-browsermap.png?branch=trunk)](https://travis-ci.org/apache/devicemap-browsermap)
 
 BrowserMap is a JavaScript browser features detection library. It uses modular probes and code snippets that detect specific features of the client; these are then used to detect the client's type and to optimize page rendering or to provide the client with alternate website versions.
 
@@ -15,7 +11,7 @@ In addition, BrowserMap is capable of detecting the device groups a client belon
 * `oldBrowser` - less modern desktop browsers
 
 ## Demo
-A small demo is available at [http://raducotescu.github.com/browsermap/index.html](http://raducotescu.github.com/browsermap/index.html).
+A small demo is available at [http://devicemap-vm.apache.org/browsermap/index.html](http://devicemap-vm.apache.org/browsermap/index.html).
 
 ## Features
 
@@ -76,3 +72,10 @@ Afterwards use `npm` to globally install `grunt-cli` and `jscoverage`:
 The tests can be run with `grunt test` inside the browsermap folder.
 
 Packaging the app is done with `grunt package`.
+
+## How to report issues or request enhancements
+Please file a JIRA issue at [https://issues.apache.org/jira/browse/DMAP](https://issues.apache.org/jira/browse/DMAP) and use the "browsermap"
+label.
+
+If you're reporting a bug please provide an accurate description of the problem together with the debug output found on the demo page from
+[http://devicemap-vm.apache.org/browsermap/index.html](http://devicemap-vm.apache.org/browsermap/index.html).
