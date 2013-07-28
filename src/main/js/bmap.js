@@ -155,8 +155,6 @@
         var alternateSites = BrowserMap.getAllAlternateSites(),
             maxLinkScore = 0,
             alternateSite = null,
-            alternateSiteCandidate = null,
-            scoreForCurrentSite = 0,
             currentURL = window.location.href,
             currentURLParameters = BrowserMapUtil.Url.getURLParametersString(currentURL),
             i,
@@ -183,13 +181,6 @@
                 alternateSite = alternateSites[i];
                 maxLinkScore = linkScore;
             }
-            if (alternateSites[i].href == currentURL) {
-                scoreForCurrentSite = linkScore;
-                alternateSiteCandidate = alternateSites[i];
-            }
-        }
-        if (scoreForCurrentSite == maxLinkScore) {
-            alternateSite = alternateSiteCandidate;
         }
         return alternateSite;
     };

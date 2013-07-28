@@ -53,7 +53,7 @@ junitReporter = {
 }
 
 // web server port
-port = 8081;
+port = 8080;
 
 
 // cli runner port

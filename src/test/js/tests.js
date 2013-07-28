@@ -18,14 +18,13 @@
  */
 
 QUnit.begin(function() {
-    var currentURL = window.location.href,
-        headElement = document.getElementsByTagName('head')[0],
+    var headElement = document.getElementsByTagName('head')[0],
         headElementContent = headElement.innerHTML;
     headElementContent += '\
-        <link rel="canonical" href="' + currentURL + '">\
-        <link rel="alternate" data-bmap-devgroups="browser" hreflang="en" href="' + currentURL + '">\
-        <link rel="alternate" data-bmap-devgroups="browser" hreflang="de" href="' + currentURL + '">\
-        <link rel="alternate" data-bmap-devgroups="smartphone" hreflang="en" href="' + currentURL.replace('.html', '.smartphone.html') + '">\
+        <link rel="canonical" href="http://www.example.com/index.html">\
+        <link rel="alternate" data-bmap-devgroups="browser" hreflang="en" href="http://www.example.com/index.html">\
+        <link rel="alternate" data-bmap-devgroups="browser" hreflang="de" href="http://www.example.com/index.html">\
+        <link rel="alternate" data-bmap-devgroups="smartphone" hreflang="en" href="http://www.example.com/index.smartphone.html">\
         <meta name="browsermap.enabled" content="false">';
     headElement.innerHTML = headElementContent;
 });
@@ -86,7 +85,7 @@ test('url', function() {
     deepEqual(BrowserMapUtil.Url.getSelectorsFromURL('http://www.example.com/index.html'), [], 'getSelectorsFromURL - no selectors');
     strictEqual(BrowserMapUtil.Url.addSelectorsToURL('http://www.example.com/index.html', ['a', 'b']), 'http://www.example.com/index.a.b.html', 'addSelectorsToURL - two selectors');
     strictEqual(BrowserMapUtil.Url.addSelectorsToURL('http://www.example.com/index.html', []), 'http://www.example.com/index.html', 'addSelectorsToURL - no selectors');
-    strictEqual(BrowserMapUtil.Url.getCanonicalURL(), window.location.href, 'getCanonicalURL');
+    strictEqual(BrowserMapUtil.Url.getCanonicalURL(), 'http://www.example.com/index.html', 'getCanonicalURL');
 });
 
 module('Array.indexOf polyfill');
@@ -96,18 +95,16 @@ test('Array.indexOf', function() {
 
 module('BrowserMap');
 test("getAllAlternateSites", function() {
-    var currentURL = window.location.href,
-        alternateSites = [
-            {href: currentURL, hreflang : 'en', devgroups : 'browser', id : ''},
-            {href: currentURL, hreflang : 'de', devgroups : 'browser', id : ''},
-            {href: window.location.href.replace(".html", ".smartphone.html"), hreflang : 'en', devgroups : 'smartphone', id : ''}
+    var alternateSites = [
+            {href: 'http://www.example.com/index.html', hreflang : 'en', devgroups : 'browser', id : ''},
+            {href: 'http://www.example.com/index.html', hreflang : 'de', devgroups : 'browser', id : ''},
+            {href: 'http://www.example.com/index.smartphone.html', hreflang : 'en', devgroups : 'smartphone', id : ''}
         ];
     deepEqual(BrowserMap.getAllAlternateSites(), alternateSites);
 });
 test("getAlternateSite", function() {
     var filter = function(link) {return link.hreflang == 'de'};
-    var currentURL = window.location.href;
-    deepEqual(BrowserMap.getAlternateSite(['browser'], filter), {href: currentURL, hreflang : 'de', devgroups : 'browser', id : ''});
+    deepEqual(BrowserMap.getAlternateSite(['browser'], filter), {href: 'http://www.example.com/index.html', hreflang : 'de', devgroups : 'browser', id : ''});
 });
 test("getDeviceGroupsInRankingOrder", function() {
     var expectedDgs = [
@@ -128,7 +125,8 @@ test("probe", function() {
     equal('number', typeof BrowserMap.probe('clientWidth'));
 });
 test("getNewURL", function() {
-    strictEqual(BrowserMap.getNewURL(window.location.href, ['smartphone'], ['smartphone']), window.location.href.replace(".html", ".smartphone.html"));
+    strictEqual(BrowserMap.getNewURL('http://www.example.com/index.html', ['smartphone'], ['smartphone']), 'http://www.example.com/index.smartphone.html');
+    strictEqual(BrowserMap.getNewURL('http://www.example.com/index.html', ['tablet'], ['tablet']), 'http://www.example.com/index.tablet.html');
 });
 test("isEnabled", function() {
     strictEqual(BrowserMap.isEnabled(), false);
