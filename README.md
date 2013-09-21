@@ -68,6 +68,7 @@ Afterwards use `npm` to globally install `grunt-cli` and `jscoverage`:
 
     npm install -g grunt-cli
     npm install -g jscoverage
+    npm install -d
 
 The tests can be run with `grunt test` inside the browsermap folder.
 
