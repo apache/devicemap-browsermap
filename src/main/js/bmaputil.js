@@ -79,7 +79,7 @@
 
     /**
      * The <code>cookieManager</code> is used to manage cookies client-side (see
-     * {@link https://developer.mozilla.org/en/DOM/document.cookie}).
+     * <a href="https://developer.mozilla.org/en/DOM/document.cookie">https://developer.mozilla.org/en/DOM/document.cookie</a>).
      *
      * @class BrowserMapUtil.CookieManager
      */
@@ -127,7 +127,7 @@
         /**
          * Removes a cookie from the client, if one exists.
          *
-         * @param {Cookie} name - the <code>Cookie</code>'s name
+         * @param {String} name - the <code>Cookie</code>'s name
          */
         removeCookie : function (name) {
             if (!name || !this.cookieExists(name)) { return; }

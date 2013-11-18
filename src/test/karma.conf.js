@@ -67,8 +67,7 @@ module.exports = function(config) {
     singleRun: false,
     // report which specs are slower than 500ms
     // CLI --report-slower-than 500
-    reportSlowerThan: 500,
-    //...
+    reportSlowerThan: 500
   });
 };
 

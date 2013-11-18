@@ -67,7 +67,7 @@
      *
      * @param {Object} config - a hash object with various properties that can be used to configure BrowserMap
      * <p>
-     * The following proprerties can be be used:
+     * The following properties can be be used:
      *      <ol>
      *          <li><code>config.cookiePrefix</code> - the prefix used to name cookies used throughout the detection</li>
      *          <li><code>config.deviceGroupCookieName</code> - the name of the device group cookie (the final name will be of the form
@@ -111,7 +111,7 @@
             i,
             link,
             headElement,
-            onIE7 = false,
+            onIE7,
             linkHref,
             devgroups;
         onIE7 = navigator.appVersion.indexOf('MSIE 7') !== -1;
@@ -156,15 +156,10 @@
         var alternateSites = BrowserMap.getAllAlternateSites(),
             maxLinkScore = 0,
             alternateSite = null,
-            currentURL = window.location.href,
-            currentURLParameters = BrowserMapUtil.Url.getURLParametersString(currentURL),
             i,
             j,
             linkScore,
             devices;
-        if (currentURLParameters && currentURLParameters !== '') {
-            currentURL = currentURL.substring(0, currentURL.indexOf(currentURLParameters));
-        }
         for (i = 0; i < alternateSites.length; i++) {
             linkScore = 0;
             devices = alternateSites[i].devgroups.split(',');
@@ -266,15 +261,19 @@
      *
      * @param {String} currentURL - the current URL
      * @param {Array} detectedDeviceGroups - the Array of detected device groups
-     * @prama {Attay} urlSelectors - the Array of URL selectors, in the order of their device group ranking
+     * @param {Array} urlSelectors - the Array of URL selectors, in the order of their device group ranking
      * @return {String} the specific URL for the identified device groups
      */
     BrowserMap.getNewURL = function (currentURL, detectedDeviceGroups, urlSelectors) {
         var newURL = null,
+            currentVariant = BrowserMap.getCurrentVariant(),
             alternateSite = BrowserMap.getAlternateSite(detectedDeviceGroups, function(alternateLink) {
                 if (languageOverride && alternateLink.hreflang && alternateLink.hreflang.lastIndexOf(languageOverride) === 0) {
                     return true;
+                } else if (currentVariant && currentVariant.hreflang === alternateLink.hreflang) {
+                    return true;
                 }
+                return false;
             }),
             i,
             dg,
@@ -590,7 +589,8 @@
      * Queries the list of DeviceGroups associated to this BrowserMap object using a DeviceGroup name and returns it if found.
      *
      * @param {String} groupName - the name of the DeviceGroup
-     * @return {DeviceGroup} the DeviceGroup with the respective name, null otherwise
+     * @return {Object} the DeviceGroup with the respective name, <code>null</code> otherwise
+     * @see BrowserMap.addDeviceGroup
      */
     BrowserMap.getDeviceGroupByName = function (groupName) {
         return deviceGroups[groupName];

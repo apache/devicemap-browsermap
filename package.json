@@ -1,6 +1,6 @@
 {
   "name": "BrowserMap",
-  "version": "1.4.0-dev",
+  "version": "1.4.0",
   "description": "YABFDL - yet another browser features detection library",
   "main": "index.js",
   "scripts": {
