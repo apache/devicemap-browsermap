@@ -44,6 +44,7 @@
     BrowserMap.VERSION = '<%= pkg.version %>'; // replaced at build time by Grunt
 
     var linkDataDevgroups = 'data-bmap-devgroups';
+    var linkcurrentVariant = 'data-bmap-currentvar';
 
     /**
      * Retrieves the probes Map - useful for outputting debugging information.
@@ -183,6 +184,45 @@
             }
         }
         return alternateSite;
+    };
+
+    /**
+     * Returns the current variant, if one is found.
+     *
+     * @return {Object} an object with the <code>id, href, hreflang, devgroups</code> set of attributes; <code>null</code> if the current
+     *                  variant cannot be determined
+     */
+    BrowserMap.getCurrentVariant = function () {
+        var headElement = document.getElementsByTagName('head')[0],
+            i = 0,
+            currentVariant = null,
+            currentVariantAttribute,
+            links,
+            link,
+            onIE7,
+            linkHref,
+            devgroups;
+        onIE7 = navigator.appVersion.indexOf('MSIE 7') !== -1;
+        if (headElement) {
+            links = headElement.getElementsByTagName('link');
+            for (i = 0; i < links.length; i++) {
+                link = links[i];
+                if (link.rel == 'alternate') {
+                    if (onIE7) {
+                        linkHref = BrowserMapUtil.Url.qualifyURL(link.href);
+                    } else {
+                        linkHref = link.href;
+                    }
+                    devgroups = link.getAttribute(linkDataDevgroups);
+                    currentVariantAttribute = link.getAttribute(linkcurrentVariant);
+                    if (currentVariantAttribute && currentVariantAttribute === 'true') {
+                        currentVariant = {'id' : link.id, 'href' : linkHref, 'hreflang' : link.hreflang, 'devgroups' : devgroups};
+                        break;
+                    }
+                }
+            }
+        }
+        return currentVariant;
     };
 
     /**

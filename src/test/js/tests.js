@@ -22,9 +22,10 @@ QUnit.begin(function() {
         headElementContent = headElement.innerHTML;
     headElementContent += '\
         <link rel="canonical" href="http://www.example.com/index.html">\
-        <link rel="alternate" data-bmap-devgroups="browser" hreflang="en" href="http://www.example.com/index.html">\
-        <link rel="alternate" data-bmap-devgroups="browser" hreflang="de" href="http://www.example.com/index.html">\
-        <link rel="alternate" data-bmap-devgroups="smartphone" hreflang="en" href="http://www.example.com/index.smartphone.html">\
+        <link rel="alternate" data-bmap-devgroups="browser" hreflang="en" href="http://www.example.com/en/index.html" data-bmap-currentvar="true">\
+        <link rel="alternate" data-bmap-devgroups="browser" hreflang="de" href="http://www.example.com/de/index.html">\
+        <link rel="alternate" data-bmap-devgroups="smartphone" hreflang="de" href="http://www.example.com/de/index.smartphone.html">\
+        <link rel="alternate" data-bmap-devgroups="smartphone" hreflang="en" href="http://www.example.com/en/index.smartphone.html">\
         <meta name="browsermap.enabled" content="false">';
     headElement.innerHTML = headElementContent;
 });
@@ -96,15 +97,16 @@ test('Array.indexOf', function() {
 module('BrowserMap');
 test("getAllAlternateSites", function() {
     var alternateSites = [
-            {href: 'http://www.example.com/index.html', hreflang : 'en', devgroups : 'browser', id : ''},
-            {href: 'http://www.example.com/index.html', hreflang : 'de', devgroups : 'browser', id : ''},
-            {href: 'http://www.example.com/index.smartphone.html', hreflang : 'en', devgroups : 'smartphone', id : ''}
-        ];
+        {href: 'http://www.example.com/en/index.html', hreflang : 'en', devgroups : 'browser', id : ''},
+        {href: 'http://www.example.com/de/index.html', hreflang : 'de', devgroups : 'browser', id : ''},
+        {href: 'http://www.example.com/de/index.smartphone.html', hreflang : 'de', devgroups : 'smartphone', id : ''},
+        {href: 'http://www.example.com/en/index.smartphone.html', hreflang : 'en', devgroups : 'smartphone', id : ''}
+    ];
     deepEqual(BrowserMap.getAllAlternateSites(), alternateSites);
 });
 test("getAlternateSite", function() {
     var filter = function(link) {return link.hreflang == 'de'};
-    deepEqual(BrowserMap.getAlternateSite(['browser'], filter), {href: 'http://www.example.com/index.html', hreflang : 'de', devgroups : 'browser', id : ''});
+    deepEqual(BrowserMap.getAlternateSite(['browser'], filter), {href: 'http://www.example.com/de/index.html', hreflang : 'de', devgroups : 'browser', id : ''});
 });
 test("getDeviceGroupsInRankingOrder", function() {
     var expectedDgs = [
@@ -125,8 +127,12 @@ test("probe", function() {
     equal('number', typeof BrowserMap.probe('clientWidth'));
 });
 test("getNewURL", function() {
-    strictEqual(BrowserMap.getNewURL('http://www.example.com/index.html', ['smartphone'], ['smartphone']), 'http://www.example.com/index.smartphone.html');
-    strictEqual(BrowserMap.getNewURL('http://www.example.com/index.html', ['tablet'], ['tablet']), 'http://www.example.com/index.tablet.html');
+    strictEqual(BrowserMap.getNewURL('http://www.example.com/en/index.html', ['smartphone'], ['smartphone']), 'http://www.example.com/en/index.smartphone.html');
+    // assume fallback to selectors-based URL even if no variant is present
+    strictEqual(BrowserMap.getNewURL('http://www.example.com/en/index.html', ['tablet'], ['tablet']), 'http://www.example.com/en/index.tablet.html');
+});
+test("getCurrentVariant", function() {
+    deepEqual(BrowserMap.getCurrentVariant(), {href: 'http://www.example.com/en/index.html', hreflang : 'en', devgroups : 'browser', id : ''});
 });
 test("isEnabled", function() {
     strictEqual(BrowserMap.isEnabled(), false);
