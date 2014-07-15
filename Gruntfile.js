@@ -96,27 +96,42 @@ module.exports = function (grunt) {
         compress: {
             browsermap: {
                 options: {
-                    archive: 'target/browsermap-<%= pkg.version %>.zip',
-                    mode: 'zip'
+                    archive: 'target/browsermap-<%= pkg.version %>-incubating.tar.gz',
+                    mode: 'tgz',
+                    pretty: true
                 },
                 files: [
-                    {src: ['LICENSE', 'NOTICE', 'README.md'], dest: '.'},
-                    {cwd: 'target/demo', src: ['**'], dest: 'demo/', expand: true},
-                    {cwd: 'target/doc/', src: ['**'], dest: 'doc/', expand: true},
-                    {cwd: 'target/libs/', src: ['browsermap/**'], dest: 'libs/', expand: true},
-                    {cwd: 'target/libs/', src: ['externals/**'], dest: 'libs/', expand: true},
-                    {cwd: 'target/libs/min/', src: ['*.js'], dest: 'libs/', expand: true}
+                    {src: ['LICENSE', 'NOTICE', 'README.md', 'DISCLAIMER'], dest: 'browsermap-<%= pkg.version %>-incubating/'},
+                    {cwd: 'target/demo', src: ['**'], dest: 'browsermap-<%= pkg.version %>-incubating/demo/', expand: true},
+                    {cwd: 'target/doc/', src: ['**'], dest: 'browsermap-<%= pkg.version %>-incubating/doc/', expand: true},
+                    {cwd: 'target/libs/min/', src: ['*.js'], dest: 'browsermap-<%= pkg.version %>-incubating/dist/', expand: true},
+                    {cwd: 'target/report', src: ['**'], dest: 'browsermap-<%= pkg.version %>-incubating/reporting/', expand: true},
+
+                    // the following entries provide the source files in the archive
+                    {cwd: 'src/', src: ['**/*.js'], dest: 'browsermap-<%= pkg.version %>-incubating/source/src/', expand: true},
+                    {cwd: 'src/', src: ['**/*.css'], dest: 'browsermap-<%= pkg.version %>-incubating/source/src/', expand: true},
+                    {cwd: 'src/', src: ['**/*.html'], dest: 'browsermap-<%= pkg.version %>-incubating/source/src/', expand: true},
+                    {
+                        src: ['.gitignore', '.travis.yml', 'Gruntfile.js', 'package.json', 'README.md', 'LICENSE', 'NOTICE', 'DISCLAIMER'],
+                        dest: 'browsermap-<%= pkg.version %>-incubating/source/'
+                    },
+                    {src: ['ci/**'], dest: 'browsermap-<%= pkg.version %>-incubating/source/'}
                 ]
             }
         },
-        'qunit-cov': {
-            test: {
-                minimum: 0.4,
-                srcDir: 'src/main/js',
-                depDirs: ['src/test'],
-                outDir: 'target/coverage',
-                testFiles: ['src/test/resources/*.html']
-            }
+        qunit: {
+            options: {
+                '--web-security': 'no',
+                coverage: {
+                    disposeCollector: true,
+                    src: ['src/main/js/bmap.js', 'src/main/js/bmaputil.js'],
+                    instrumentedFiles: 'target/report/ins/',
+                    htmlReport: 'target/report/coverage',
+                    coberturaReport: 'target/report/',
+                    linesThresholdPct: 50
+                }
+            },
+            all: ['src/test/resources/**/*.html']
         },
         clean: ['target/'],
         demo: {
@@ -201,11 +216,11 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-compress');
-    grunt.loadNpmTasks('grunt-qunit-cov');
+    grunt.loadNpmTasks('grunt-qunit-istanbul');
 
     grunt.registerTask('minify', ['uglify']);
     grunt.registerTask('coverage', ['qunit-cov']);
-    grunt.registerTask('test', ['jshint', 'karma:continuous', 'coverage']);
+    grunt.registerTask('test', ['jshint', 'karma:continuous', 'qunit']);
     grunt.registerTask('package', ['clean', 'test', 'copy:browsermap', 'sourcetemplates', 'minify', 'copy:minified', 'demo', 'jsdoc',
         'compress']);
 };
