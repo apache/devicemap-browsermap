@@ -1,4 +1,7 @@
-# Apache DeviceMap - BrowserMap module [![Build Status](https://travis-ci.org/apache/devicemap-browsermap.png?branch=trunk)](https://travis-ci.org/apache/devicemap-browsermap)
+## Apache DeviceMap - BrowserMap module
+
+[![Build Status](https://travis-ci.org/apache/devicemap-browsermap.png?branch=trunk)](https://travis-ci.org/apache/devicemap-browsermap)
+[![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
 
 BrowserMap is a JavaScript browser features detection library. It uses modular probes and code snippets that detect specific features of the client; these are then used to detect the client's type and to optimize page rendering or to provide the client with alternate website versions.
 
@@ -10,10 +13,10 @@ In addition, BrowserMap is capable of detecting the device groups a client belon
 * `browser` - desktop browsers capable of CSS 3D transitions (another Modernizr test is used for this feature)
 * `oldBrowser` - less modern desktop browsers
 
-## Demo
+### Demo
 A small demo is available at [http://devicemap-vm.apache.org/browsermap/index.html](http://devicemap-vm.apache.org/browsermap/index.html).
 
-## Features
+### Features
 
 * extensible probing mechanism;
 * on-demand probing with probes' results cache and cache clearing mechanism;
@@ -24,7 +27,7 @@ A small demo is available at [http://devicemap-vm.apache.org/browsermap/index.ht
     * modify the current URL to include a `DeviceGroup` selector, in case none of the previous two methods has been set up (e.g. `http://www.example.com/index.smartphone.html` for the `smartphone` device group);
 * device group override (by using a combined mechanism of a `GET` parameter and cookie storage) so that a client from a certain device group can access the pages designed for a different device group; for clients that do not support cookies, the device group override uses just a `GET` parameter which can optionally be appended to each URL pointing to a resource from the same domain as the current resource.
 
-## BrowserMap relevant files
+### BrowserMap relevant files
 The BrowserMap code is organised in two base folders:
 
 * `libs/browsermap/`:
@@ -46,7 +49,7 @@ In order to have a functional BrowserMap instance, the previous files have to be
         <script type="text/javascript" src="libs/browsermap/probes.js"></script>
         <script type="text/javascript" src="libs/browsermap/devicegroups.js"></script>
 
-## `DeviceGroup`s configuration
+### `DeviceGroup`s configuration
 A `DeviceGroup` object has the following attributes:
 
 * `ranking` - determines the order in which, when added to the `BrowserMap` object, the `DeviceGroup`s will be matched; a lower ranking means an earlier evaluation (e.g. 0 is evaluated before 10);
@@ -57,7 +60,7 @@ A `DeviceGroup` object has the following attributes:
 
 To add a `DeviceGroup` to the `BrowserMap` object, one can use the `BrowserMap.addDeviceGroup(DeviceGroup object)` method. The last `DeviceGroup` added to `BrowserMap` with the same name as a previously existing `DeviceGroup` will be the one which will be stored, which can be useful if one tries to override the default `DeviceGroups`.
 
-## Development
+### Development
 BrowserMap's own source files are located in `src/main/js`.
 
 The main test file is located in `src/test/js` and the tests are based on [QUnit](http://qunitjs.com/ "QUnit").
@@ -74,7 +77,7 @@ The tests can be run with `grunt test` inside the browsermap folder.
 
 Packaging the app is done with `grunt package`.
 
-## How to report issues or request enhancements
+### How to report issues or request enhancements
 Please file a JIRA issue at [https://issues.apache.org/jira/browse/DMAP](https://issues.apache.org/jira/browse/DMAP) and use the "browsermap"
 label.
 
