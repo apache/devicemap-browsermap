@@ -58,7 +58,8 @@ module.exports = function (grunt) {
                 files: [
                     {src: ['src/main/js/*.js'], dest: 'target/libs/browsermap/', expand: true, flatten: true},
                     {cwd: 'src/main/resources/demo/', src: ['**'], dest: 'target/demo/', expand: true},
-                    {cwd: 'src/main/lib/', src: ['**'], dest: 'target/libs/externals/', expand: true}
+                    {cwd: 'src/main/lib/', src: ['**'], dest: 'target/libs/externals/', expand: true},
+                    {src: ['NOTICE'], dest: 'target/', expand: true}
                 ]
             },
             minified: {
@@ -94,28 +95,39 @@ module.exports = function (grunt) {
             }
         },
         compress: {
-            browsermap: {
+            source: {
                 options: {
                     archive: 'target/browsermap-<%= pkg.version %>-incubating.tar.gz',
                     mode: 'tgz',
                     pretty: true
                 },
                 files: [
-                    {src: ['LICENSE', 'NOTICE', 'README.md', 'DISCLAIMER'], dest: 'browsermap-<%= pkg.version %>-incubating/'},
-                    {cwd: 'target/demo', src: ['**'], dest: 'browsermap-<%= pkg.version %>-incubating/demo/', expand: true},
-                    {cwd: 'target/doc/', src: ['**'], dest: 'browsermap-<%= pkg.version %>-incubating/doc/', expand: true},
-                    {cwd: 'target/libs/min/', src: ['*.js'], dest: 'browsermap-<%= pkg.version %>-incubating/dist/', expand: true},
-                    {cwd: 'target/report', src: ['**'], dest: 'browsermap-<%= pkg.version %>-incubating/reporting/', expand: true},
-
                     // the following entries provide the source files in the archive
-                    {cwd: 'src/', src: ['**/*.js'], dest: 'browsermap-<%= pkg.version %>-incubating/source/src/', expand: true},
-                    {cwd: 'src/', src: ['**/*.css'], dest: 'browsermap-<%= pkg.version %>-incubating/source/src/', expand: true},
-                    {cwd: 'src/', src: ['**/*.html'], dest: 'browsermap-<%= pkg.version %>-incubating/source/src/', expand: true},
+                    {cwd: 'src/', src: ['**/*.js'], dest: 'browsermap-<%= pkg.version %>-incubating/src/', expand: true},
+                    {cwd: 'src/', src: ['**/*.css'], dest: 'browsermap-<%= pkg.version %>-incubating/src/', expand: true},
+                    {cwd: 'src/', src: ['**/*.html'], dest: 'browsermap-<%= pkg.version %>-incubating/src/', expand: true},
+                    {cwd: 'target/', src: ['NOTICE'], dest: 'browsermap-<%= pkg.version %>-incubating/', expand: true},
                     {
-                        src: ['.gitignore', '.travis.yml', 'Gruntfile.js', 'package.json', 'README.md', 'LICENSE', 'NOTICE', 'DISCLAIMER'],
-                        dest: 'browsermap-<%= pkg.version %>-incubating/source/'
+                        src: [
+                            '.gitignore', '.travis.yml', 'Gruntfile.js', 'package.json', 'README.md', 'LICENSE', 'DISCLAIMER', 'rat.exclude'
+                        ],
+                        dest: 'browsermap-<%= pkg.version %>-incubating/'
                     },
-                    {src: ['ci/**'], dest: 'browsermap-<%= pkg.version %>-incubating/source/'}
+                    {src: ['ci/**'], dest: 'browsermap-<%= pkg.version %>-incubating/'}
+                ]
+            },
+            dist: {
+                options: {
+                    archive: 'target/browsermap-<%= pkg.version %>-incubating-dist.tar.gz',
+                    mode: 'tgz',
+                    pretty: true
+                },
+                files: [
+                    {src: ['LICENSE', 'README.md', 'DISCLAIMER'], dest: 'browsermap-<%= pkg.version %>-incubating-dist/'},
+                    {cwd: 'target/demo', src: ['**'], dest: 'browsermap-<%= pkg.version %>-incubating-dist/demo/', expand: true},
+                    {cwd: 'target/doc/', src: ['**'], dest: 'browsermap-<%= pkg.version %>-incubating-dist/doc/', expand: true},
+                    {cwd: 'target/', src: ['NOTICE'], dest: 'browsermap-<%= pkg.version %>-incubating-dist/', expand: true},
+                    {cwd: 'target/libs/min/', src: ['*.js'], dest: 'browsermap-<%= pkg.version %>-incubating-dist/', expand: true}
                 ]
             }
         },
@@ -148,7 +160,7 @@ module.exports = function (grunt) {
             ]
         },
         sourcetemplates: {
-            files: ['target/libs/browsermap/bmap.js']
+            files: ['target/libs/browsermap/bmap.js', 'target/NOTICE']
         }
     });
 
@@ -222,5 +234,5 @@ module.exports = function (grunt) {
     grunt.registerTask('coverage', ['qunit-cov']);
     grunt.registerTask('test', ['jshint', 'karma:continuous', 'qunit']);
     grunt.registerTask('package', ['clean', 'test', 'copy:browsermap', 'sourcetemplates', 'minify', 'copy:minified', 'demo', 'jsdoc',
-        'compress']);
+        'compress:source', 'compress:dist']);
 };
