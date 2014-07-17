@@ -67,10 +67,9 @@ The main test file is located in `src/test/js` and the tests are based on [QUnit
 
 The builds are handled with [Grunt](http://gruntjs.com/ "Grunt"). In order to build the project you need to install
 [PhantomJS](http://phantomjs.org/ "PhantomJS"), [Node.js](http://nodejs.org/ "Node.js") and [npm](https://github.com/isaacs/npm "npm").
-Afterwards use `npm` to globally install `grunt-cli` and `jscoverage`:
+Afterwards use `npm` to globally install `grunt-cli` and the development dependencies:
 
     npm install -g grunt-cli
-    npm install -g jscoverage
     npm install -d
 
 The tests can be run with `grunt test` inside the browsermap folder.
