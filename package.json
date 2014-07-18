@@ -1,7 +1,7 @@
 {
   "name": "browsermap",
   "title": "Apache DeviceMap BrowserMap",
-  "version": "1.4.1-rc1",
+  "version": "1.4.1",
   "description": "YABFDL - yet another browser features detection library",
   "scripts": {
     "test": "grunt test"
